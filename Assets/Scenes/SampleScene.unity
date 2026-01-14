@@ -4549,6 +4549,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -4683669308469848369, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -4560,6 +4564,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: m_Name
       value: racks
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5903,8 +5915,8 @@ MonoBehaviour:
         serializedVersion: 2
         x: 50
         y: 180
-        width: 131.51999
-        height: 32
+        width: 131.52
+        height: 48
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
@@ -5913,7 +5925,16 @@ MonoBehaviour:
           name: PACKAGE_ENTER
           isSystemEvent: 0
           isGlobal: 0
-        toState: FilterCollider
+        toState: AcceptCorrect
+        linkStyle: 0
+        linkConstraint: 0
+        linkTarget: 0
+        colorIndex: 0
+      - fsmEvent:
+          name: WRONG
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: RejectWrong
         linkStyle: 0
         linkConstraint: 0
         linkTarget: 0
@@ -5956,7 +5977,7 @@ MonoBehaviour:
           tooltip: 
           showInInspector: 0
           networkSync: 0
-          value: 
+          value: Package1
         fsmObjectParams: []
         fsmVarParams: []
         fsmArrayParams: []
@@ -7816,9 +7837,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 586610358}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Racks
-  m_TagString: Untagged
+  m_TagString: Box
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11790,6 +11811,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -4683669308469848369, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -11801,6 +11826,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: m_Name
       value: racks (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15276,6 +15309,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -4683669308469848369, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -15287,6 +15324,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: m_Name
       value: racks (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15463,9 +15508,11 @@ GameObject:
   - component: {fileID: 1760075993}
   - component: {fileID: 1760075992}
   - component: {fileID: 1760075996}
+  - component: {fileID: 1760075997}
+  - component: {fileID: 1760075998}
   m_Layer: 0
   m_Name: Package_2
-  m_TagString: Package
+  m_TagString: Package1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15485,7 +15532,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -15604,25 +15651,17 @@ MonoBehaviour:
         colorIndex: 0
       actionData:
         actionNames:
-        - HutongGames.PlayMaker.Actions.GameObjectCompareTag
         - HutongGames.PlayMaker.Actions.TriggerEvent
         customNames:
         - 
-        - 
-        actionEnabled: 0101
-        actionIsOpen: 0101
-        actionStartIndex: 0000000006000000
-        actionHashCodes: 7b3126029c512400
+        actionEnabled: 01
+        actionIsOpen: 01
+        actionStartIndex: 00000000
+        actionHashCodes: 9c512400
         unityObjectParams: []
         fsmGameObjectParams:
         - useVariable: 1
-          name: EnterGO
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: {fileID: 0}
-        - useVariable: 1
-          name: EnterGO
+          name: 
           tooltip: 
           showInInspector: 0
           networkSync: 0
@@ -15649,54 +15688,34 @@ MonoBehaviour:
           showInInspector: 0
           networkSync: 0
           value: Player
-        - useVariable: 0
-          name: 
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: 
         fsmObjectParams: []
         fsmVarParams: []
         fsmArrayParams: []
         fsmEnumParams: []
         fsmFloatParams: []
         fsmIntParams: []
-        fsmBoolParams:
-        - useVariable: 1
-          name: 
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: 0
+        fsmBoolParams: []
         fsmVector2Params: []
         fsmVector3Params: []
         fsmColorParams: []
         fsmRectParams: []
         fsmQuaternionParams: []
         stringParams:
-        - PLAYER_IS_PLAYER
-        - 
         - PLAYER_ENTER
-        byteData: 0100000000
+        byteData: 00000000
         arrayParamSizes: 
         arrayParamTypes: []
         customTypeSizes: 
         customTypeNames: []
-        paramDataType: 1300000012000000170000001700000011000000010000001400000007000000120000001700000013000000
+        paramDataType: 1400000007000000120000001700000013000000
         paramName:
-        - gameObject
-        - tag
-        - trueEvent
-        - falseEvent
-        - storeResult
-        - everyFrame
         - gameObject
         - trigger
         - collideTag
         - sendEvent
         - storeCollider
-        paramDataPos: 0000000000000000000000000100000000000000000000000000000001000000010000000200000001000000
-        paramByteDataSize: 0000000000000000000000000000000000000000010000000000000004000000000000000000000000000000
+        paramDataPos: 0000000000000000000000000000000000000000
+        paramByteDataSize: 0000000004000000000000000000000000000000
     - name: PlayerNearby
       description: 
       colorIndex: 0
@@ -15739,33 +15758,21 @@ MonoBehaviour:
         colorIndex: 0
       actionData:
         actionNames:
-        - HutongGames.PlayMaker.Actions.BoolTest
-        - HutongGames.PlayMaker.Actions.BoolTest
         - HutongGames.PlayMaker.Actions.GetKeyDown
         - HutongGames.PlayMaker.Actions.GetKeyDown
         - HutongGames.PlayMaker.Actions.TriggerEvent
-        - HutongGames.PlayMaker.Actions.GameObjectCompareTag
         customNames:
         - 
         - 
         - 
-        - 
-        - 
-        - 
-        actionEnabled: 010101010101
-        actionIsOpen: 010101010101
-        actionStartIndex: 0000000004000000080000000b0000000e00000013000000
-        actionHashCodes: a4c8bf00a4c8bf00ff77a904ff77a9049c5124007b312602
+        actionEnabled: 010101
+        actionIsOpen: 010101
+        actionStartIndex: 000000000300000006000000
+        actionHashCodes: ff77a904ff77a9049c512400
         unityObjectParams: []
         fsmGameObjectParams:
         - useVariable: 1
-          name: ExitGO
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: {fileID: 0}
-        - useVariable: 1
-          name: ExitGO
+          name: 
           tooltip: 
           showInInspector: 0
           networkSync: 0
@@ -15791,12 +15798,6 @@ MonoBehaviour:
           tooltip: 
           showInInspector: 0
           networkSync: 0
-          value: 
-        - useVariable: 0
-          name: 
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
           value: Player
         fsmObjectParams: []
         fsmVarParams: []
@@ -15806,25 +15807,7 @@ MonoBehaviour:
         fsmIntParams: []
         fsmBoolParams:
         - useVariable: 1
-          name: KeyF_Pressed
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: 0
-        - useVariable: 1
-          name: KeyE_Pressed
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: 0
-        - useVariable: 1
-          name: KeyE_Pressed
-          tooltip: 
-          showInInspector: 0
-          networkSync: 0
-          value: 0
-        - useVariable: 1
-          name: KeyF_Pressed
+          name: 
           tooltip: 
           showInInspector: 0
           networkSync: 0
@@ -15841,30 +15824,16 @@ MonoBehaviour:
         fsmRectParams: []
         fsmQuaternionParams: []
         stringParams:
-        - PICK_UP
-        - 
         - SHOW_LABEL
-        - 
-        - 
-        - 
+        - PICK_UP
         - PLAYER_LEFT
-        - PLAYER_LEFT
-        - 
-        byteData: 010165000000660000000200000001
+        byteData: 650000006600000002000000
         arrayParamSizes: 
         arrayParamTypes: []
         customTypeSizes: 
         customTypeNames: []
-        paramDataType: 11000000170000001700000001000000110000001700000017000000010000000700000017000000110000000700000017000000110000001400000007000000120000001700000013000000130000001200000017000000170000001100000001000000
+        paramDataType: 0700000017000000110000000700000017000000110000001400000007000000120000001700000013000000
         paramName:
-        - boolVariable
-        - isTrue
-        - isFalse
-        - everyFrame
-        - boolVariable
-        - isTrue
-        - isFalse
-        - everyFrame
         - key
         - sendEvent
         - storeResult
@@ -15876,14 +15845,8 @@ MonoBehaviour:
         - collideTag
         - sendEvent
         - storeCollider
-        - gameObject
-        - tag
-        - trueEvent
-        - falseEvent
-        - storeResult
-        - everyFrame
-        paramDataPos: 0000000000000000010000000000000001000000020000000300000001000000020000000400000002000000060000000500000003000000000000000a00000000000000060000000000000001000000010000000700000008000000040000000e000000
-        paramByteDataSize: 00000000000000000000000001000000000000000000000000000000010000000400000000000000000000000400000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000000000001000000
+        paramDataPos: 0000000000000000000000000400000001000000010000000000000008000000000000000200000000000000
+        paramByteDataSize: 0400000000000000000000000400000000000000000000000000000004000000000000000000000000000000
     - name: Carried
       description: 
       colorIndex: 0
@@ -16160,6 +16123,9 @@ MonoBehaviour:
     - name: SOMEONE_EXIT
       isSystemEvent: 0
       isGlobal: 0
+    - name: FINISHED
+      isSystemEvent: 1
+      isGlobal: 0
     globalTransitions: []
     variables:
       floatVariables: []
@@ -16299,6 +16265,54 @@ MonoBehaviour:
     handleAnimatorIK: 0
   fsmTemplate: {fileID: 0}
   eventHandlerComponentsAdded: 0
+--- !u!135 &1760075997
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760075991}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1760075998
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760075991}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &1792579050
 GameObject:
   m_ObjectHideFlags: 0
@@ -18977,6 +18991,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -4683669308469848369, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -18988,6 +19006,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: m_Name
       value: racks (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20477,6 +20503,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8391222552659086748, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -4683669308469848369, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -20488,6 +20518,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
       propertyPath: m_Name
       value: racks (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8416272007918961125, guid: 69ee4f65b6bf5bd4da9fbae5128a7e8d, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
