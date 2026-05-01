@@ -13257,6 +13257,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e5b797705e0da624ebb2ea5e86fe106f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e5b797705e0da624ebb2ea5e86fe106f, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -102585,6 +102589,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ad07b8f18498a52488b8beca7268ec59, type: 3}
       propertyPath: m_Name
       value: NPC
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ad07b8f18498a52488b8beca7268ec59, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ad07b8f18498a52488b8beca7268ec59, type: 3}
       propertyPath: m_TagString
