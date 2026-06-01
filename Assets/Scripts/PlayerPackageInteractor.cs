@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
 public class PlayerPackageInteractor : MonoBehaviour
 {
@@ -12,6 +13,13 @@ public class PlayerPackageInteractor : MonoBehaviour
     public GameObject conversationStarter;
     public GameObject dialoguePanel;
     public TMP_Text dialogueText;
+    
+    [Header("World Prompts (3D TextMeshPro)")]
+    public TextMeshPro packagePrompt3D;
+    public Vector3 packagePromptOffset = new Vector3(0f, 1.5f, 0f);
+    public TextMeshPro npcPrompt3D;
+    public Vector3 npcPromptOffset = new Vector3(0f, 1.8f, 0f);
+    public bool billboardWorldPrompts = true;
 
     [TextArea(2, 5)]
     public string[] dialogueLines;
@@ -41,13 +49,24 @@ public class PlayerPackageInteractor : MonoBehaviour
     PackageItem nearbyPackage;
     BoxDropZone nearbyBox;
     PackageItem heldPackage;
+    Transform nearbyNpc;
     int deliveredCount;
     bool isInNpcRange;
+    Camera promptCamera;
 
     void Start()
     {
+        promptCamera = Camera.main;
         UpdateCounter();
         ShowDialogueMessage(startDialogueText);
+        ConfigurePromptRendering(packagePrompt3D);
+        ConfigurePromptRendering(npcPrompt3D);
+        SetPromptActive(packagePrompt3D, false);
+        SetPromptActive(npcPrompt3D, false);
+        if (packagePrompt3D != null && packageInteractionInfo != null)
+            packageInteractionInfo.SetActive(false);
+        if (npcPrompt3D != null && conversationStarter != null)
+            conversationStarter.SetActive(false);
     }
 
     void Update()
@@ -63,6 +82,8 @@ public class PlayerPackageInteractor : MonoBehaviour
 
         if (WasPressed(closePanelKey))
             ClosePanels();
+
+        UpdateWorldPrompts();
     }
 
     bool WasPressed(Key key)
@@ -201,7 +222,7 @@ public class PlayerPackageInteractor : MonoBehaviour
         if (other.CompareTag(packageTag) && other.TryGetComponent(out PackageItem package))
         {
             nearbyPackage = package;
-            if (packageInteractionInfo != null)
+            if (packagePrompt3D == null && packageInteractionInfo != null)
                 packageInteractionInfo.SetActive(true);
         }
 
@@ -215,7 +236,8 @@ public class PlayerPackageInteractor : MonoBehaviour
         if (other.CompareTag(npcTag))
         {
             isInNpcRange = true;
-            if (conversationStarter != null)
+            nearbyNpc = GetPromptTarget(other);
+            if (npcPrompt3D == null && conversationStarter != null)
                 conversationStarter.SetActive(true);
         }
     }
@@ -227,7 +249,7 @@ public class PlayerPackageInteractor : MonoBehaviour
             if (nearbyPackage == package)
             {
                 nearbyPackage = null;
-                if (packageInteractionInfo != null)
+                if (packagePrompt3D == null && packageInteractionInfo != null)
                     packageInteractionInfo.SetActive(false);
             }
         }
@@ -245,8 +267,96 @@ public class PlayerPackageInteractor : MonoBehaviour
         if (other.CompareTag(npcTag))
         {
             isInNpcRange = false;
-            if (conversationStarter != null)
+            nearbyNpc = null;
+            if (npcPrompt3D == null && conversationStarter != null)
                 conversationStarter.SetActive(false);
         }
+    }
+
+    void UpdateWorldPrompts()
+    {
+        if (packagePrompt3D != null)
+        {
+            bool showPackagePrompt = nearbyPackage != null && heldPackage == null;
+            SetPromptActive(packagePrompt3D, showPackagePrompt);
+            if (showPackagePrompt)
+            {
+                PositionPrompt(packagePrompt3D.transform, nearbyPackage.transform, packagePromptOffset);
+            }
+        }
+
+        if (npcPrompt3D != null)
+        {
+            bool showNpcPrompt = isInNpcRange && nearbyNpc != null;
+            SetPromptActive(npcPrompt3D, showNpcPrompt);
+            if (showNpcPrompt)
+            {
+                PositionPrompt(npcPrompt3D.transform, nearbyNpc, npcPromptOffset);
+            }
+        }
+    }
+
+    void PositionPrompt(Transform prompt, Transform target, Vector3 offset)
+    {
+        if (prompt == null || target == null)
+            return;
+
+        prompt.position = target.position + offset;
+
+        if (!billboardWorldPrompts)
+            return;
+
+        if (promptCamera == null)
+            promptCamera = Camera.main;
+
+        if (promptCamera == null)
+            return;
+
+        var toCamera = promptCamera.transform.position - prompt.position;
+        if (toCamera.sqrMagnitude <= 0.0001f)
+            return;
+
+        // TMP 3D text front face is opposite in this setup, so invert the billboard forward vector.
+        prompt.rotation = Quaternion.LookRotation((-toCamera).normalized, Vector3.up);
+    }
+
+    static void SetPromptActive(TMP_Text prompt, bool active)
+    {
+        if (prompt != null && prompt.gameObject.activeSelf != active)
+            prompt.gameObject.SetActive(active);
+    }
+
+    static Transform GetPromptTarget(Collider other)
+    {
+        if (other == null)
+            return null;
+
+        if (other.attachedRigidbody != null)
+            return other.attachedRigidbody.transform;
+
+        return other.transform;
+    }
+
+    static void ConfigurePromptRendering(TextMeshPro prompt)
+    {
+        if (prompt == null)
+            return;
+
+        var renderer = prompt.GetComponent<Renderer>();
+        if (renderer != null)
+            renderer.sortingOrder = short.MaxValue;
+
+        // Use a per-instance material and force draw on top of scene geometry.
+        var material = prompt.fontMaterial;
+        if (material == null)
+            return;
+
+        if (material.HasProperty("_ZTestMode"))
+            material.SetFloat("_ZTestMode", (float)CompareFunction.Always);
+        if (material.HasProperty("_ZWrite"))
+            material.SetFloat("_ZWrite", 0f);
+
+        material.renderQueue = 5000;
+        prompt.fontMaterial = material;
     }
 }
