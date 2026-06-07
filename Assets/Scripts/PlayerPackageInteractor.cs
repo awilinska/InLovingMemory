@@ -1,7 +1,6 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 
 public class PlayerPackageInteractor : MonoBehaviour
 {
@@ -53,20 +52,28 @@ public class PlayerPackageInteractor : MonoBehaviour
     int deliveredCount;
     bool isInNpcRange;
     Camera promptCamera;
+    Material packagePromptOverlayMaterial;
+    Material npcPromptOverlayMaterial;
 
     void Start()
     {
         promptCamera = Camera.main;
         UpdateCounter();
         ShowDialogueMessage(startDialogueText);
-        ConfigurePromptRendering(packagePrompt3D);
-        ConfigurePromptRendering(npcPrompt3D);
+        packagePromptOverlayMaterial = ConfigurePromptRendering(packagePrompt3D);
+        npcPromptOverlayMaterial = ConfigurePromptRendering(npcPrompt3D);
         SetPromptActive(packagePrompt3D, false);
         SetPromptActive(npcPrompt3D, false);
         if (packagePrompt3D != null && packageInteractionInfo != null)
             packageInteractionInfo.SetActive(false);
         if (npcPrompt3D != null && conversationStarter != null)
             conversationStarter.SetActive(false);
+    }
+
+    void OnDestroy()
+    {
+        Destroy(packagePromptOverlayMaterial);
+        Destroy(npcPromptOverlayMaterial);
     }
 
     void Update()
@@ -294,6 +301,7 @@ public class PlayerPackageInteractor : MonoBehaviour
                 PositionPrompt(npcPrompt3D.transform, nearbyNpc, npcPromptOffset);
             }
         }
+
     }
 
     void PositionPrompt(Transform prompt, Transform target, Vector3 offset)
@@ -337,26 +345,30 @@ public class PlayerPackageInteractor : MonoBehaviour
         return other.transform;
     }
 
-    static void ConfigurePromptRendering(TextMeshPro prompt)
+    static Material ConfigurePromptRendering(TextMeshPro prompt)
     {
         if (prompt == null)
-            return;
+            return null;
 
         var renderer = prompt.GetComponent<Renderer>();
         if (renderer != null)
             renderer.sortingOrder = short.MaxValue;
 
-        // Use a per-instance material and force draw on top of scene geometry.
-        var material = prompt.fontMaterial;
-        if (material == null)
-            return;
+        var sourceMaterial = prompt.fontSharedMaterial;
+        var overlayShader = Shader.Find("TextMeshPro/Distance Field Overlay");
+        if (sourceMaterial == null || overlayShader == null)
+            return null;
 
-        if (material.HasProperty("_ZTestMode"))
-            material.SetFloat("_ZTestMode", (float)CompareFunction.Always);
-        if (material.HasProperty("_ZWrite"))
-            material.SetFloat("_ZWrite", 0f);
+        // TMP's overlay shader disables depth testing, matching screen-space UI behavior.
+        var overlayMaterial = new Material(sourceMaterial)
+        {
+            name = $"{sourceMaterial.name} (World Prompt Overlay)",
+            shader = overlayShader,
+            renderQueue = 5000
+        };
 
-        material.renderQueue = 5000;
-        prompt.fontMaterial = material;
+        prompt.fontMaterial = overlayMaterial;
+        prompt.SetMaterialDirty();
+        return overlayMaterial;
     }
 }
