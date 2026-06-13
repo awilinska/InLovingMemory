@@ -59,38 +59,77 @@ Shader "Hidden/InLovingMemory/EdgeDetectionOutline"
 
             float DepthSobel(float2 uv)
             {
-                float bottomLeft = SampleDepth(uv, float2(-1, -1) * _Thickness);
-                float topRight = SampleDepth(uv, float2(1, 1) * _Thickness);
-                float topLeft = SampleDepth(uv, float2(-1, 1) * _Thickness);
-                float bottomRight = SampleDepth(uv, float2(1, -1) * _Thickness);
+                float2 left = float2(-1, 0) * _Thickness;
+                float2 right = float2(1, 0) * _Thickness;
+                float2 bottom = float2(0, -1) * _Thickness;
+                float2 top = float2(0, 1) * _Thickness;
 
-                float gradientX = bottomLeft - topRight;
-                float gradientY = topLeft - bottomRight;
-                return sqrt(gradientX * gradientX + gradientY * gradientY);
+                float bottomLeft = SampleDepth(uv, left + bottom);
+                float bottomCenter = SampleDepth(uv, bottom);
+                float bottomRight = SampleDepth(uv, right + bottom);
+                float centerLeft = SampleDepth(uv, left);
+                float centerRight = SampleDepth(uv, right);
+                float topLeft = SampleDepth(uv, left + top);
+                float topCenter = SampleDepth(uv, top);
+                float topRight = SampleDepth(uv, right + top);
+
+                float gradientX =
+                    bottomRight + 2.0 * centerRight + topRight
+                    - bottomLeft - 2.0 * centerLeft - topLeft;
+                float gradientY =
+                    topLeft + 2.0 * topCenter + topRight
+                    - bottomLeft - 2.0 * bottomCenter - bottomRight;
+                return sqrt(gradientX * gradientX + gradientY * gradientY) * 0.25;
             }
 
             float NormalSobel(float2 uv)
             {
-                float3 bottomLeft = SampleNormal(uv, float2(-1, -1) * _Thickness);
-                float3 topRight = SampleNormal(uv, float2(1, 1) * _Thickness);
-                float3 topLeft = SampleNormal(uv, float2(-1, 1) * _Thickness);
-                float3 bottomRight = SampleNormal(uv, float2(1, -1) * _Thickness);
+                float2 left = float2(-1, 0) * _Thickness;
+                float2 right = float2(1, 0) * _Thickness;
+                float2 bottom = float2(0, -1) * _Thickness;
+                float2 top = float2(0, 1) * _Thickness;
 
-                float3 gradientX = bottomLeft - topRight;
-                float3 gradientY = topLeft - bottomRight;
-                return sqrt(dot(gradientX, gradientX) + dot(gradientY, gradientY));
+                float3 bottomLeft = SampleNormal(uv, left + bottom);
+                float3 bottomCenter = SampleNormal(uv, bottom);
+                float3 bottomRight = SampleNormal(uv, right + bottom);
+                float3 centerLeft = SampleNormal(uv, left);
+                float3 centerRight = SampleNormal(uv, right);
+                float3 topLeft = SampleNormal(uv, left + top);
+                float3 topCenter = SampleNormal(uv, top);
+                float3 topRight = SampleNormal(uv, right + top);
+
+                float3 gradientX =
+                    bottomRight + 2.0 * centerRight + topRight
+                    - bottomLeft - 2.0 * centerLeft - topLeft;
+                float3 gradientY =
+                    topLeft + 2.0 * topCenter + topRight
+                    - bottomLeft - 2.0 * bottomCenter - bottomRight;
+                return sqrt(dot(gradientX, gradientX) + dot(gradientY, gradientY)) * 0.25;
             }
 
             float LuminanceSobel(float2 uv)
             {
-                float bottomLeft = SampleLuminance(uv, float2(-1, -1) * _Thickness);
-                float topRight = SampleLuminance(uv, float2(1, 1) * _Thickness);
-                float topLeft = SampleLuminance(uv, float2(-1, 1) * _Thickness);
-                float bottomRight = SampleLuminance(uv, float2(1, -1) * _Thickness);
+                float2 left = float2(-1, 0) * _Thickness;
+                float2 right = float2(1, 0) * _Thickness;
+                float2 bottom = float2(0, -1) * _Thickness;
+                float2 top = float2(0, 1) * _Thickness;
 
-                float gradientX = bottomLeft - topRight;
-                float gradientY = topLeft - bottomRight;
-                return sqrt(gradientX * gradientX + gradientY * gradientY);
+                float bottomLeft = SampleLuminance(uv, left + bottom);
+                float bottomCenter = SampleLuminance(uv, bottom);
+                float bottomRight = SampleLuminance(uv, right + bottom);
+                float centerLeft = SampleLuminance(uv, left);
+                float centerRight = SampleLuminance(uv, right);
+                float topLeft = SampleLuminance(uv, left + top);
+                float topCenter = SampleLuminance(uv, top);
+                float topRight = SampleLuminance(uv, right + top);
+
+                float gradientX =
+                    bottomRight + 2.0 * centerRight + topRight
+                    - bottomLeft - 2.0 * centerLeft - topLeft;
+                float gradientY =
+                    topLeft + 2.0 * topCenter + topRight
+                    - bottomLeft - 2.0 * bottomCenter - bottomRight;
+                return sqrt(gradientX * gradientX + gradientY * gradientY) * 0.25;
             }
 
             float4 Fragment(Varyings input) : SV_Target
