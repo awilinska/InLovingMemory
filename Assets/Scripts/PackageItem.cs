@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PackageItem : MonoBehaviour
 {
     [Header("Inspect Window")]
     public Sprite inspectSprite;
+
+    [Header("Menu")]
+    public Image sortedMenuImage;
 
     [Header("Held Item UI")]
     [Tooltip("Falls back to Inspect Sprite when left empty.")]
@@ -32,6 +36,17 @@ public class PackageItem : MonoBehaviour
     public Sprite HeldSprite => heldSprite != null ? heldSprite : inspectSprite;
     public string InfoText => infoText;
     public string NpcDialogueText => npcDialogueText;
+
+    public void RevealInMenu()
+    {
+        if (sortedMenuImage == null || inspectSprite == null)
+            return;
+
+        sortedMenuImage.sprite = inspectSprite;
+        sortedMenuImage.preserveAspect = true;
+        sortedMenuImage.color = Color.white;
+        sortedMenuImage.enabled = true;
+    }
 
     void Awake()
     {

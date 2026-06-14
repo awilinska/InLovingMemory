@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -15,6 +16,10 @@ public class PrototypeFlowController : MonoBehaviour
     [Header("References")]
     public PlayerPackageInteractor playerInteractor;
     public TMP_Text objectiveText;
+    public GameObject newTaskObject;
+
+    [Header("New Task Notification")]
+    public float newTaskDisplaySeconds = 5f;
 
     [Header("Objectives")]
     public string objectiveHeader = "TO DO:";
@@ -31,11 +36,15 @@ public class PrototypeFlowController : MonoBehaviour
     public string completionDialogue = "Great job, we did it in no time!";
 
     FlowStage stage;
+    Coroutine newTaskRoutine;
 
     void Awake()
     {
         if (playerInteractor == null)
             playerInteractor = GetComponent<PlayerPackageInteractor>();
+
+        if (newTaskObject != null)
+            newTaskObject.SetActive(false);
     }
 
     void OnEnable()
@@ -55,6 +64,8 @@ public class PrototypeFlowController : MonoBehaviour
 
     void OnDisable()
     {
+        HideNewTaskNotification();
+
         if (playerInteractor == null)
             return;
 
@@ -116,6 +127,11 @@ public class PrototypeFlowController : MonoBehaviour
                 SetObjective(completedTask);
                 break;
         }
+
+        if (stage == FlowStage.Complete)
+            HideNewTaskNotification();
+        else
+            ShowNewTaskNotification();
     }
 
     void SetObjective(string task)
@@ -127,5 +143,37 @@ public class PrototypeFlowController : MonoBehaviour
     void SetPackingObjective(int delivered, int total)
     {
         SetObjective($"{packBoxesTask} ({delivered}/{total})");
+    }
+
+    void ShowNewTaskNotification()
+    {
+        if (newTaskObject == null)
+            return;
+
+        if (newTaskRoutine != null)
+            StopCoroutine(newTaskRoutine);
+
+        newTaskObject.SetActive(true);
+        newTaskRoutine = StartCoroutine(HideNewTaskNotificationAfterDelay());
+    }
+
+    IEnumerator HideNewTaskNotificationAfterDelay()
+    {
+        yield return new WaitForSecondsRealtime(Mathf.Max(0f, newTaskDisplaySeconds));
+
+        newTaskObject.SetActive(false);
+        newTaskRoutine = null;
+    }
+
+    void HideNewTaskNotification()
+    {
+        if (newTaskRoutine != null)
+        {
+            StopCoroutine(newTaskRoutine);
+            newTaskRoutine = null;
+        }
+
+        if (newTaskObject != null)
+            newTaskObject.SetActive(false);
     }
 }

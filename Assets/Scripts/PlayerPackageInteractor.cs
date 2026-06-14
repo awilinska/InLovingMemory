@@ -16,6 +16,7 @@ public class PlayerPackageInteractor : MonoBehaviour
     public GameObject conversationStarter;
     public GameObject dialoguePanel;
     public TMP_Text dialogueText;
+    public GameObject menu;
     
     [Header("World Prompts (3D TextMeshPro)")]
     public TextMeshPro packagePrompt3D;
@@ -51,6 +52,7 @@ public class PlayerPackageInteractor : MonoBehaviour
     public Key talkKey = Key.T;
     public Key closePanelKey = Key.X;
     public Key closeDialogueKey = Key.Space;
+    public Key menuKey = Key.Tab;
 
     PackageItem nearbyPackage;
     BoxDropZone nearbyBox;
@@ -77,6 +79,9 @@ public class PlayerPackageInteractor : MonoBehaviour
     void Start()
     {
         promptCamera = Camera.main;
+        if (menu != null)
+            menu.SetActive(false);
+
         ResolveInfoImage();
         ShowHeldPackageSprite(null);
         UpdateDropPrompt();
@@ -105,6 +110,9 @@ public class PlayerPackageInteractor : MonoBehaviour
 
     void Update()
     {
+        if (WasPressed(menuKey))
+            ToggleMenu();
+
         if (WasPressed(infoKey))
             ShowInfo();
 
@@ -121,6 +129,12 @@ public class PlayerPackageInteractor : MonoBehaviour
             CloseDialoguePanel();
 
         UpdateWorldPrompts();
+    }
+
+    void ToggleMenu()
+    {
+        if (menu != null)
+            menu.SetActive(!menu.activeSelf);
     }
 
     bool WasPressed(Key key)
@@ -273,6 +287,7 @@ public class PlayerPackageInteractor : MonoBehaviour
         var dropPoint = dropZone.GetDropPoint();
         var delivered = heldPackage;
         delivered.DeliverTo(dropPoint, dropZone.transform);
+        delivered.RevealInMenu();
 
         heldPackage = null;
         ShowHeldPackageSprite(null);
