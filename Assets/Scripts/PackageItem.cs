@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class PackageItem : MonoBehaviour
 {
+    [Header("Inspect Window")]
+    public Sprite inspectSprite;
+
+    [Header("Held Item UI")]
+    [Tooltip("Falls back to Inspect Sprite when left empty.")]
+    public Sprite heldSprite;
+
     [TextArea(2, 5)]
     public string infoText;
 
@@ -16,9 +23,13 @@ public class PackageItem : MonoBehaviour
 
     Rigidbody cachedRigidbody;
     Collider[] cachedColliders;
+    Renderer[] cachedRenderers;
+    bool[] cachedRendererStates;
     bool cachedKinematic;
 
     public bool IsHeld { get; private set; }
+    public Sprite InspectSprite => inspectSprite;
+    public Sprite HeldSprite => heldSprite != null ? heldSprite : inspectSprite;
     public string InfoText => infoText;
     public string NpcDialogueText => npcDialogueText;
 
@@ -26,6 +37,11 @@ public class PackageItem : MonoBehaviour
     {
         cachedRigidbody = GetComponent<Rigidbody>();
         cachedColliders = GetComponentsInChildren<Collider>();
+        cachedRenderers = GetComponentsInChildren<Renderer>(true);
+        cachedRendererStates = new bool[cachedRenderers.Length];
+
+        for (int i = 0; i < cachedRenderers.Length; i++)
+            cachedRendererStates[i] = cachedRenderers[i] != null && cachedRenderers[i].enabled;
     }
 
     public void PickUp(Transform holdPoint)
@@ -38,12 +54,16 @@ public class PackageItem : MonoBehaviour
         if (cachedRigidbody != null)
         {
             cachedKinematic = cachedRigidbody.isKinematic;
-            cachedRigidbody.isKinematic = true;
-            cachedRigidbody.linearVelocity = Vector3.zero;
-            cachedRigidbody.angularVelocity = Vector3.zero;
+            if (!cachedRigidbody.isKinematic)
+            {
+                cachedRigidbody.linearVelocity = Vector3.zero;
+                cachedRigidbody.angularVelocity = Vector3.zero;
+                cachedRigidbody.isKinematic = true;
+            }
         }
 
         SetCollidersEnabled(false);
+        SetRenderersEnabled(false);
 
         transform.SetParent(holdPoint, false);
         transform.localPosition = holdLocalPosition;
@@ -66,6 +86,7 @@ public class PackageItem : MonoBehaviour
         }
 
         SetCollidersEnabled(true);
+        RestoreRendererStates();
 
         if (cachedRigidbody != null)
             cachedRigidbody.isKinematic = cachedKinematic;
@@ -85,12 +106,16 @@ public class PackageItem : MonoBehaviour
 
         if (cachedRigidbody != null)
         {
-            cachedRigidbody.isKinematic = true;
-            cachedRigidbody.linearVelocity = Vector3.zero;
-            cachedRigidbody.angularVelocity = Vector3.zero;
+            if (!cachedRigidbody.isKinematic)
+            {
+                cachedRigidbody.linearVelocity = Vector3.zero;
+                cachedRigidbody.angularVelocity = Vector3.zero;
+                cachedRigidbody.isKinematic = true;
+            }
         }
 
         SetCollidersEnabled(false);
+        SetRenderersEnabled(false);
     }
 
     void SetCollidersEnabled(bool enabled)
@@ -102,6 +127,30 @@ public class PackageItem : MonoBehaviour
         {
             if (col != null)
                 col.enabled = enabled;
+        }
+    }
+
+    void SetRenderersEnabled(bool enabled)
+    {
+        if (cachedRenderers == null)
+            return;
+
+        foreach (var renderer in cachedRenderers)
+        {
+            if (renderer != null)
+                renderer.enabled = enabled;
+        }
+    }
+
+    void RestoreRendererStates()
+    {
+        if (cachedRenderers == null || cachedRendererStates == null)
+            return;
+
+        for (int i = 0; i < cachedRenderers.Length; i++)
+        {
+            if (cachedRenderers[i] != null)
+                cachedRenderers[i].enabled = cachedRendererStates[i];
         }
     }
 }
