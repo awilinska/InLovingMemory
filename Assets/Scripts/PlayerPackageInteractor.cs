@@ -54,14 +54,22 @@ public class PlayerPackageInteractor : MonoBehaviour
     Camera promptCamera;
     Material packagePromptOverlayMaterial;
     Material npcPromptOverlayMaterial;
+    TMP_FontAsset packagePromptFontAsset;
+    TMP_FontAsset npcPromptFontAsset;
 
     void Start()
     {
         promptCamera = Camera.main;
         UpdateCounter();
         ShowDialogueMessage(startDialogueText);
-        packagePromptOverlayMaterial = ConfigurePromptRendering(packagePrompt3D);
-        npcPromptOverlayMaterial = ConfigurePromptRendering(npcPrompt3D);
+        EnsurePromptRendering(
+            packagePrompt3D,
+            ref packagePromptOverlayMaterial,
+            ref packagePromptFontAsset);
+        EnsurePromptRendering(
+            npcPrompt3D,
+            ref npcPromptOverlayMaterial,
+            ref npcPromptFontAsset);
         SetPromptActive(packagePrompt3D, false);
         SetPromptActive(npcPrompt3D, false);
         if (packagePrompt3D != null && packageInteractionInfo != null)
@@ -285,9 +293,16 @@ public class PlayerPackageInteractor : MonoBehaviour
         if (packagePrompt3D != null)
         {
             bool showPackagePrompt = nearbyPackage != null && heldPackage == null;
-            SetPromptActive(packagePrompt3D, showPackagePrompt);
+            bool wasActivated = SetPromptActive(packagePrompt3D, showPackagePrompt);
             if (showPackagePrompt)
             {
+                if (wasActivated)
+                    packagePrompt3D.ForceMeshUpdate(true, true);
+
+                EnsurePromptRendering(
+                    packagePrompt3D,
+                    ref packagePromptOverlayMaterial,
+                    ref packagePromptFontAsset);
                 PositionPrompt(packagePrompt3D.transform, nearbyPackage.transform, packagePromptOffset);
             }
         }
@@ -295,9 +310,16 @@ public class PlayerPackageInteractor : MonoBehaviour
         if (npcPrompt3D != null)
         {
             bool showNpcPrompt = isInNpcRange && nearbyNpc != null;
-            SetPromptActive(npcPrompt3D, showNpcPrompt);
+            bool wasActivated = SetPromptActive(npcPrompt3D, showNpcPrompt);
             if (showNpcPrompt)
             {
+                if (wasActivated)
+                    npcPrompt3D.ForceMeshUpdate(true, true);
+
+                EnsurePromptRendering(
+                    npcPrompt3D,
+                    ref npcPromptOverlayMaterial,
+                    ref npcPromptFontAsset);
                 PositionPrompt(npcPrompt3D.transform, nearbyNpc, npcPromptOffset);
             }
         }
@@ -328,10 +350,13 @@ public class PlayerPackageInteractor : MonoBehaviour
         prompt.rotation = Quaternion.LookRotation((-toCamera).normalized, Vector3.up);
     }
 
-    static void SetPromptActive(TMP_Text prompt, bool active)
+    static bool SetPromptActive(TMP_Text prompt, bool active)
     {
-        if (prompt != null && prompt.gameObject.activeSelf != active)
-            prompt.gameObject.SetActive(active);
+        if (prompt == null || prompt.gameObject.activeSelf == active)
+            return false;
+
+        prompt.gameObject.SetActive(active);
+        return active;
     }
 
     static Transform GetPromptTarget(Collider other)
@@ -345,22 +370,48 @@ public class PlayerPackageInteractor : MonoBehaviour
         return other.transform;
     }
 
-    static Material ConfigurePromptRendering(TextMeshPro prompt)
+    static void EnsurePromptRendering(
+        TextMeshPro prompt,
+        ref Material overlayMaterial,
+        ref TMP_FontAsset configuredFontAsset)
     {
         if (prompt == null)
-            return null;
+            return;
 
         var renderer = prompt.GetComponent<Renderer>();
         if (renderer != null)
             renderer.sortingOrder = short.MaxValue;
 
-        var sourceMaterial = prompt.fontSharedMaterial;
+        var fontAsset = prompt.font;
         var overlayShader = Shader.Find("TextMeshPro/Distance Field Overlay");
-        if (sourceMaterial == null || overlayShader == null)
-            return null;
+        if (fontAsset == null || overlayShader == null)
+            return;
+
+        bool needsRebuild =
+            overlayMaterial == null
+            || configuredFontAsset != fontAsset
+            || prompt.fontSharedMaterial != overlayMaterial
+            || overlayMaterial.shader != overlayShader;
+
+        if (!needsRebuild)
+            return;
+
+        var sourceMaterial = prompt.fontSharedMaterial;
+        if (sourceMaterial == null
+            || sourceMaterial == overlayMaterial
+            || sourceMaterial.mainTexture != fontAsset.atlasTexture)
+        {
+            sourceMaterial = fontAsset.material;
+        }
+
+        if (sourceMaterial == null)
+            return;
+
+        if (overlayMaterial != null)
+            Destroy(overlayMaterial);
 
         // TMP's overlay shader disables depth testing, matching screen-space UI behavior.
-        var overlayMaterial = new Material(sourceMaterial)
+        overlayMaterial = new Material(sourceMaterial)
         {
             name = $"{sourceMaterial.name} (World Prompt Overlay)",
             shader = overlayShader,
@@ -369,6 +420,6 @@ public class PlayerPackageInteractor : MonoBehaviour
 
         prompt.fontMaterial = overlayMaterial;
         prompt.SetMaterialDirty();
-        return overlayMaterial;
+        configuredFontAsset = fontAsset;
     }
 }
