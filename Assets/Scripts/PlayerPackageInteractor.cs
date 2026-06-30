@@ -67,6 +67,7 @@ public class PlayerPackageInteractor : MonoBehaviour
     TMP_FontAsset npcPromptFontAsset;
     bool packageInteractionEnabled = true;
     bool packageCompletionReported;
+    bool useAlternatePackageNpcDialogue;
 
     public event Func<bool> NpcTalkRequested;
     public event Action<int, int> PackageProgressChanged;
@@ -247,10 +248,14 @@ public class PlayerPackageInteractor : MonoBehaviour
         if (!isInNpcRange || dialogueText == null)
             return;
 
-        if (heldPackage != null && !string.IsNullOrWhiteSpace(heldPackage.NpcDialogueText))
+        if (heldPackage != null)
         {
-            ShowDialogueMessage(heldPackage.NpcDialogueText);
-            return;
+            string packageDialogue = heldPackage.GetNpcDialogueText(useAlternatePackageNpcDialogue);
+            if (!string.IsNullOrWhiteSpace(packageDialogue))
+            {
+                ShowDialogueMessage(packageDialogue);
+                return;
+            }
         }
 
         if (HandleNpcTalkRequest())
@@ -338,6 +343,11 @@ public class PlayerPackageInteractor : MonoBehaviour
         }
 
         UpdateDropPrompt();
+    }
+
+    public void SetAlternatePackageNpcDialogueEnabled(bool enabled)
+    {
+        useAlternatePackageNpcDialogue = enabled;
     }
 
     void ClosePanels()

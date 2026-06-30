@@ -19,6 +19,9 @@ public class PackageItem : MonoBehaviour
     [TextArea(2, 5)]
     public string npcDialogueText;
 
+    [TextArea(2, 5)]
+    public string alternateNpcDialogueText;
+
     public BoxDropZone targetBox;
 
     [Header("Hold Pose (local to hold point)")]
@@ -36,6 +39,15 @@ public class PackageItem : MonoBehaviour
     public Sprite HeldSprite => heldSprite != null ? heldSprite : inspectSprite;
     public string InfoText => infoText;
     public string NpcDialogueText => npcDialogueText;
+    public string AlternateNpcDialogueText => alternateNpcDialogueText;
+
+    public string GetNpcDialogueText(bool useAlternate)
+    {
+        if (useAlternate && !string.IsNullOrWhiteSpace(alternateNpcDialogueText))
+            return alternateNpcDialogueText;
+
+        return npcDialogueText;
+    }
 
     public void RevealInMenu()
     {

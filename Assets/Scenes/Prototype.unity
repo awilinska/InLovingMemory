@@ -19597,13 +19597,25 @@ MonoBehaviour:
   playerInteractor: {fileID: 307825922}
   objectiveText: {fileID: 99331956}
   newTaskObject: {fileID: 1221803884}
+  splitCamera: {fileID: 0}
   newTaskDisplaySeconds: 5
   objectiveHeader: 
   talkToGrandmaTask: Talk to grandma
   packBoxesTask: Pack the rest of things
   tellGrandmaTask: Tell grandma that you're done
   completedTask: All done
+  packagesBeforeGrandmaInterrupt: 2
+  startingLeftCameraSeam: 0.999
+  grandmaPeekSeam: 0.75
+  grandmaFullRightSeam: 0.001
+  grandmaPeekSeconds: 3
+  grandmaFullRightSeconds: 2
   packingDialogue: 'GRANDMA: We should pack the things into the boxes.'
+  grandmaInterruptDialogue: 'GRANDMA: The packages should be sorted by now, mailman
+    will be there soon!'
+  grandmaCheckDialogueFirst: 'GRANDMA: Who are you? Are you new here? The packages
+    should''ve been sorted right now...'
+  grandmaCheckDialogueSecond: What's going on...
   completionDialogue: 'GRANDMA: Great job, we did it in no time!'
 --- !u!1001 &314340616
 PrefabInstance:
@@ -21314,7 +21326,7 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.95
+    width: 0.999
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -22858,6 +22870,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: c78c74677d780b74d99505eed5531a08, type: 3}
   infoText: I must've knock it off the table, when I was carrying boxes...
   npcDialogueText: 'GRANDMA: It''s broken...'
+  alternateNpcDialogueText: 'GRANDMA: Counter six, damaged goods. Mark it clearly before it reaches my desk.'
   targetBox: {fileID: 255033885}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -39636,6 +39649,7 @@ MonoBehaviour:
   infoText: Oh God, I hate old photos so much. But I don't have guts to take it away
     from her.
   npcDialogueText: 'GRANDMA: I took this photo when we were on a walk.'
+  alternateNpcDialogueText: 'GRANDMA: Counter eight, archive mail. Handle the photograph like official records.'
   targetBox: {fileID: 543018381}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -57446,6 +57460,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: acc6170c1235d0740846d02cde8e7f62, type: 3}
   infoText: Children's books. I remember some of them. Not for me anymore, tho.
   npcDialogueText: 'GRANDMA: We can donate them to school library.'
+  alternateNpcDialogueText: 'GRANDMA: Counter five, books to donation mail. Stack them by height, please.'
   targetBox: {fileID: 1098353151}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -82201,6 +82216,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: 87c63d96b6c91874f98c333103aa24af, type: 3}
   infoText: Almost empty, I don't know if I can use it anymore.
   npcDialogueText: 'GRANDMA: This one should go to trash.'
+  alternateNpcDialogueText: 'GRANDMA: Counter seven, refuse bin delivery. Fast route, no ceremony.'
   targetBox: {fileID: 255033885}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -93003,6 +93019,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: ae9c8e9bb1904be4d895e3a6fee9a19a, type: 3}
   infoText: I would've take it home, but with my talent it'll be dead within a week.
   npcDialogueText: 'GRANDMA: It''s so nice, but I dont need it.'
+  alternateNpcDialogueText: 'GRANDMA: Counter four, live parcel. Water is not a tracking number.'
   targetBox: {fileID: 1098353151}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -93419,7 +93436,7 @@ MonoBehaviour:
   master: {fileID: 855095266}
   leftCam: {fileID: 330585545}
   rightCam: {fileID: 1754316472}
-  seam: 0.95
+  seam: 0.999
   updateEveryFrame: 1
 --- !u!4 &1677110591
 Transform:
@@ -97157,6 +97174,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: f6bdc6c3e6d11e746b0160c7c3b5f35d, type: 3}
   infoText: That looks old. Like Titanic-times old.
   npcDialogueText: 'GRANDMA: My mother gave it to me when I was your age.'
+  alternateNpcDialogueText: 'GRANDMA: Counter nine, priority heirloom. Nobody loses that on my shift.'
   targetBox: {fileID: 543018381}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -97866,9 +97884,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.95
+    x: 0.999
     y: 0
-    width: 0.050000012
+    width: 0.0009999871
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -106930,6 +106948,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: 8e2e30bf4bcd585428fe74dc2ab5ed12, type: 3}
   infoText: An empty tea can. I remember playing with it when I was a kid.
   npcDialogueText: 'GRANDMA: I bought it on the trip to London.'
+  alternateNpcDialogueText: 'GRANDMA: Counter one, tea tin parcel. Stamp it twice and keep the queue moving.'
   targetBox: {fileID: 543018381}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -111631,6 +111650,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: 7f9ed5db1c895624cab6fe91d81c4592, type: 3}
   infoText: That's a nice collection of papers.
   npcDialogueText: 'GRANDMA: I think we can toss it away...'
+  alternateNpcDialogueText: 'GRANDMA: Counter two, paperwork goes to outgoing. No dawdling, clerk.'
   targetBox: {fileID: 255033885}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
@@ -112815,6 +112835,7 @@ MonoBehaviour:
   heldSprite: {fileID: 21300000, guid: bab3b5d04daa50f46881c021b7769a0e, type: 3}
   infoText: We already packed enough towels for one person...
   npcDialogueText: 'GRANDMA: I never used these towels, we should give them away.'
+  alternateNpcDialogueText: 'GRANDMA: Counter three, towels are relief stock. Tie the label straight.'
   targetBox: {fileID: 1098353151}
   holdLocalPosition: {x: 0, y: 0, z: 0}
   holdLocalEuler: {x: 0, y: 0, z: 0}
