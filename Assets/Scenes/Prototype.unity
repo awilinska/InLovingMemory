@@ -21314,7 +21314,7 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.5
+    width: 0.95
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -93419,7 +93419,7 @@ MonoBehaviour:
   master: {fileID: 855095266}
   leftCam: {fileID: 330585545}
   rightCam: {fileID: 1754316472}
-  seam: 0.5
+  seam: 0.95
   updateEveryFrame: 1
 --- !u!4 &1677110591
 Transform:
@@ -97866,9 +97866,9 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.5
+    x: 0.95
     y: 0
-    width: 0.5
+    width: 0.050000012
     height: 1
   near clip plane: 0.3
   far clip plane: 1000

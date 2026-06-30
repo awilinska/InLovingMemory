@@ -12,7 +12,7 @@ public class WideSplitCameraComposite : MonoBehaviour
     public Camera rightCam;
 
     [Header("Seam")]
-    [Range(0.05f, 0.95f)]
+    [Range(0f, 1f)]
     [Tooltip("Portion of the screen taken by the LEFT camera. 0.66 = left takes 2/3, right takes 1/3.")]
     public float seam = 0.5f;
 
@@ -30,7 +30,7 @@ public class WideSplitCameraComposite : MonoBehaviour
     // So dragging the seam slider in editor updates immediately
     void OnValidate()
     {
-        seam = Mathf.Clamp(seam, 0.05f, 0.95f);
+        seam = Mathf.Clamp01(seam);
         Apply();
     }
 #endif
@@ -43,13 +43,18 @@ public class WideSplitCameraComposite : MonoBehaviour
         SyncCameraPoseAndSettings(master, leftCam);
         SyncCameraPoseAndSettings(master, rightCam);
 
+        float clampedSeam = Mathf.Clamp01(seam);
+
         // Viewport split
-        leftCam.rect  = new Rect(0f,   0f, seam,      1f);
-        rightCam.rect = new Rect(seam, 0f, 1f - seam, 1f);
+        leftCam.rect  = new Rect(0f,          0f, clampedSeam,      1f);
+        rightCam.rect = new Rect(clampedSeam, 0f, 1f - clampedSeam, 1f);
 
         // Split ONE wide frustum at seam
-        ApplySplitProjection(master, leftCam,  isLeft: true,  seam01: seam);
-        ApplySplitProjection(master, rightCam, isLeft: false, seam01: seam);
+        if (clampedSeam > 0f)
+            ApplySplitProjection(master, leftCam, isLeft: true, seam01: clampedSeam);
+
+        if (clampedSeam < 1f)
+            ApplySplitProjection(master, rightCam, isLeft: false, seam01: clampedSeam);
     }
 
     static void SyncCameraPoseAndSettings(Camera src, Camera dst)
