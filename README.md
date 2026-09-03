@@ -9,5 +9,5 @@ I created most of the models myself in Blender (some of them, such as the charac
 
 ## Short gameplay video:
 
-[<img width="1920" height="1080" alt="Image Sequence_018_0000" src="https://github.com/user-attachments/assets/0737cc25-f26e-4302-b296-c43898143bd8" />](https://www.youtube.com/watch?v=jcTqYLGEb14)
+[<img width="1920" height="1080" alt="Image Sequence_018_0000" src="https://github.com/user-attachments/assets/0737cc25-f26e-4302-b296-c43898143bd8" />](https://www.youtube.com/watch?v=lCleBvWnkJs)
 
